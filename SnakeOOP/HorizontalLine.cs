@@ -4,22 +4,23 @@ using System.Text;
 
 namespace SnakeOOP
 {
-    class HorizontalLine : Figure
-    {
-        
-
-        public HorizontalLine(int xLeft, int xRight, int y, char symb)
+    
+    
+        class HorizontalLine : Figure
         {
-            pointList = new List<Point>();
-
-            for(int i = xLeft; i<= xRight; i++)
+            public HorizontalLine(int xLeft, int xRight, int y, char symb)
             {
-                Point p = new Point(i, y, symb);
-                pointList.Add(p);
+                pointList = new List<Point>();
+
+                for (int i = xLeft; i <= xRight; i++)
+                {
+                    Point p = new Point(i, y, symb);
+                    pointList.Add(p);
+                }
+
             }
-
         }
-
-        
-    }
+    
 }
+
+

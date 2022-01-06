@@ -1,36 +1,89 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace SnakeOOP
 {
     class Program
     {
+        
         static void Main(string[] args)
         {
-            Point p1 = new Point(10, 10, '*');
-            Point p2 = new Point(11, 10, '*');
+            Console.BackgroundColor = ConsoleColor.Gray;
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Clear();
 
-            HorizontalLine hLine = new HorizontalLine(10, 15, 5, '*');
-            hLine.Draw();
-            VerticalLine vLine = new VerticalLine(6, 16, 10, '@');
+            int score = 0;
+            //drawing a game field frame
+            Walls walls = new Walls(80, 25);
+            walls.Draw();
 
-            HorizontalLine top = new HorizontalLine(0, 80, 0, '#');
-            top.Draw();
-            VerticalLine left = new VerticalLine(0, 25, 0, '@');
-            left.Draw();
-            HorizontalLine bottom = new HorizontalLine(0, 80, 25, '$');
-            bottom.Draw();
-            VerticalLine right = new VerticalLine(0, 25, 80, '$');
-            right.Draw();
-
-            Point snakeTail = new Point(15, 15, 's');
-            Snake snake = new Snake(snakeTail, 10, Direction.DOWN);
+            Point snakeTail = new Point(15, 15, 'õ');
+            Snake snake = new Snake(snakeTail, 5, Direction.RIGHT);
             snake.Draw();
 
+            FoodGenerator foodGenerator = new FoodGenerator(80, 25, '$');
+            Point food = foodGenerator.GenerateFood();
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            food.Draw();
+            FoodGenerator foodGenerator2 = new FoodGenerator(80, 25, '*');
+            Point food2 = foodGenerator2.GenerateFood();
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            food2.Draw();
+
+            while (true)
+            {
+                if (walls.IsHit(snake) || snake.IsHitTail())
+                {
+                    break;
+                }
+
+                if (snake.Eat(food))
+                {
+                    food = foodGenerator.GenerateFood();
+                    food.Draw();
+                    score++;
+                }
+                else
+                {
+                    snake.Move();
+                }
+
+                if (Console.KeyAvailable)
+                {
+                    ConsoleKeyInfo key = Console.ReadKey();
+                    snake.HandleKeys(key.Key);
+                }
+                Thread.Sleep(300);
+
+            }
+            string str_score = Convert.ToString(score);
+            WriteGameOver(str_score);
             Console.ReadLine();
         }
+        public static void WriteGameOver(string score)
+        {
 
-        
+            Console.Beep();
+
+            int xOffset = 25;
+            int yOffset = 8;
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.SetCursorPosition(xOffset, yOffset++);
+            WriteText("========================", xOffset, yOffset++);
+            WriteText("        GAME OVER       ", xOffset + 1, yOffset++);
+            yOffset++;
+            WriteText($" You Scored {score} points", xOffset + 2, yOffset++);
+            WriteText("", xOffset + 1, yOffset++);
+            WriteText("=========================", xOffset, yOffset++);
+        }
+        public static void WriteText(string text, int xOffset, int YOffset)
+        {
+            Console.SetCursorPosition(xOffset, YOffset);
+            Console.WriteLine(text);
+        }
+
+
 
     }
 }

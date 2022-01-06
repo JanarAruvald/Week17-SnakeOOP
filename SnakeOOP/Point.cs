@@ -27,15 +27,15 @@ namespace SnakeOOP
 
         public void Move(int offset, Direction direction)
         {
-            if(direction == Direction.RIGHT)
+            if (direction == Direction.RIGHT)
             {
                 x = x + offset;
             }
-            else if(direction == Direction.LEFT)
+            else if (direction == Direction.LEFT)
             {
                 x = x - offset;
             }
-            else if(direction == Direction.UP)
+            else if (direction == Direction.UP)
             {
                 y = y - offset;
             }
@@ -44,15 +44,21 @@ namespace SnakeOOP
                 y = y + offset;
             }
         }
-
         public void Draw()
         {
             Console.SetCursorPosition(x, y);
             Console.Write(symb);
-
+        }
+        public void Clear()
+        {
+            symb = ' ';
+            Draw();
         }
 
-
+        public bool IsHit(Point p)
+        {
+            return p.x == x && p.y == y;
+        }
 
     }
 }
